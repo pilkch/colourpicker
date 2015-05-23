@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Colour Picker</title>
+    <meta name="description" content="Colour picker with a basic representation of what a colour blind person may see">
+    <meta name="author" content="chris.iluo.net">
+
+    <!-- Mobile layout hints -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="css/zerogrid.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/component.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <!-- Fav icon -->
+    <link href='images/icon.ico' rel='icon' type='image/x-icon'/>
+  
+    <!-- Javascript -->
+
+    <script charset="UTF-8" src="javascript/jquery-2.1.4.min.js" type="text/javascript"></script>
+    <script charset="UTF-8" src="javascript/colourpicker.js" type="text/javascript"></script>
+    
+    <script type="text/javascript" charset="UTF-8">
+      function bind(context, name) {
+        return function(){
+          return context[name].apply(context, arguments);
+        };
+      }
+
+      var handler = {
+        OnColourSelected: function() {
+          console.log("handler.OnColourSelected");
+        }
+      };
+    
+      $(document).ready(function () {
+        app.init(handler);
+      });
+    </script>
+  </head>
+  <body>
+    <div class="wrap-body">
+    <!--------------Header--------------->
+    <header>
+      <div class="top-header">
+        <div class="wrap-top zerogrid">
+          <div class="row">
+            <div class="top-social">
+              <a href="http://chris.iluo.net/">Home</a>
+              <a href="about.html">About</a></li>
+              <a href="contact.php">Contact Us</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wrap-header zerogrid">
+        <div class="row">
+          <div class="col-1-3">
+            <div id="logo">
+              <h2>Colour Picker</h2>
+              <p>A colour picker including colour blind modes that can show you what a colour blind person would see instead</p>
+            </div>	
+          </div>          
+        </div>
+      </div>
+    </header>
+
+        
+
+    <!--------------Content--------------->
+    <section class="container page-home">
+      <div id="main-content" class="wrap-container zerogrid">
+        <article>
+          <div class="col-1-2 left">
+            <a class="art-category left" href="#">RGB</a>
+            <div class="clear"></div>
+            <div class="art-content">
+              RGB<br/>
+              <canvas class="color-palette" width="284" height="155"></canvas>
+            </div>
+          </div>
+          <div class="col-1-2 right">
+            <a class="art-category right" href="#">RGB as viewed with Tritanopia</a>
+            <div class="clear"></div>
+            <div class="art-content">
+              RGB as viewed with Tritanopia (Blues are greatly reduced (0.003% of the population))<br/>
+              <canvas class="color-palette" width="284" height="155"></canvas>
+            </div>
+          </div>
+        </article>
+        <article>
+          <div class="col-1-2 left">
+            <a class="art-category left" href="#">RGB as viewed with Protanopia</a>
+            <div class="clear"></div>
+            <div class="art-content">
+              RGB as viewed with Protanopia (Reds are greatly reduced (1% of men))<br/>
+              <canvas class="color-palette" width="284" height="155"></canvas>
+            </div>
+          </div>
+          <div class="col-1-2 left">
+            <a class="art-category right" href="#">RGB as viewed with Deuteranopia</a>
+            <div class="clear"></div>
+            <div class="art-content">
+              RGB as viewed with Deuteranopia (Greens are greatly reduced (1% of men))<br/>
+              <canvas class="color-palette" width="284" height="155"></canvas>
+            </div>
+          </div>
+        </article>
+      </div>
+      
+      TODO:
+      <ul>
+        <li>Show a list of common colours at the bottom with a colour swatch and text for colour blind people to pick <img src="http://wearecolorblind.com/wp-content/uploads/msword-color-picker-onhover1.jpg"/></li>
+        <li>Use HTML5 colour picker too which opens the system dialog</li>
+      </ul>
+      
+    </section>
+    <!--------------Footer--------------->
+    <footer>
+      <div class="wrap-footer zerogrid">
+        <div class="row">
+          <div class="col-full">
+            <div class="wrap-col">
+              <div class="menu-bottom">
+                <ul>
+                  <li><a href="#">Home</a></li>
+                  <li><a href="#">Blog</a></li>
+                  <li><a href="#">About</a></li>
+                  <li><a href="#">Contact</a></li>
+                </ul>
+                <div class="clear"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>Copyright © 2015 Chris Pilkington</p>
+        <p>Theme Copyright © 2015 <a href="http://www.zerotheme.com" rel="nofollow">Zerotheme</a></p>
+      </div>
+    </footer>
+    </div>
+  </body>
+</html>
