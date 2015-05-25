@@ -26,6 +26,7 @@ You should have received a copy of the GNU Lesser General Public
 ### What is this?
 
 This is just a colour picker written in javascript, but it also has 3 other colour pickers that show a basic simulation of what a colour blind person might see.  
+
 The four colour pickers available are:  
 RGB  
 RGB Protanope - Reds are greatly reduced (1% of men)  
