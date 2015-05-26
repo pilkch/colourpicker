@@ -22,6 +22,11 @@ app.init = function(handler) {
   app.initCanvas(1);
   app.initCanvas(2);
   app.initCanvas(3);
+  
+  // Apply our colour blind filters
+  app.applyColourBlindFilterProtanopia(1);
+  app.applyColourBlindFilterDeuteranopia(2);
+  app.applyColourBlindFilterTritanopia(3);
 };
 
 app.initCanvas = function(uCanvasIndex) {
@@ -97,4 +102,74 @@ app.getPixel = function(uCanvasIndex, x, y) {
   var colour = { r : imageData.data[0], g : imageData.data[1], b : imageData.data[2] };
   
   return colour;
+};
+
+app.setPixel = function(uCanvasIndex, x, y, colour) {
+  // Get a 1x1 image of our pixel
+  var imageData = app.colorctx[uCanvasIndex].createImageData(1, 1);
+  var data  = imageData.data;
+  data[0]   = colour.r;
+  data[1]   = colour.g;
+  data[2]   = colour.b;
+  data[3]   = 255; // Full alpha
+
+  // Set the new image data
+  app.colorctx[uCanvasIndex].putImageData(imageData, x, y);  
+};
+
+// Protanopia (Reds are greatly reduced (1% of men))
+app.applyColourBlindFilterProtanopia = function(uCanvasIndex) {
+  var width = app.colors[uCanvasIndex].$element.width();
+  var height = app.colors[uCanvasIndex].$element.height();
+  for (y = height / 2; y < height; y++) {
+    for (x = width / 2; x < width; x++) {
+      var colour = app.getPixel(uCanvasIndex, x, y);
+
+      var colourf = ColourRGB255ToRGBf(colour);
+      
+      var colourFilteredf = ApplyFilterProtanopia(colourf);
+      
+      var newColour = ColourRGBfToRGB255(colourFilteredf);
+      
+      app.setPixel(uCanvasIndex, x, y, newColour);
+    }
+  }
+};
+
+// Deuteranopia (Greens are greatly reduced (1% of men))
+app.applyColourBlindFilterDeuteranopia = function(uCanvasIndex) {
+  var width = app.colors[uCanvasIndex].$element.width();
+  var height = app.colors[uCanvasIndex].$element.height();
+  for (y = height / 2; y < height; y++) {
+    for (x = width / 2; x < width; x++) {
+      var colour = app.getPixel(uCanvasIndex, x, y);
+
+      var colourf = ColourRGB255ToRGBf(colour);
+      
+      var colourFilteredf = ApplyFilterDeuteranopia(colourf);  
+      
+      var newColour = ColourRGBfToRGB255(colourFilteredf);
+      
+      app.setPixel(uCanvasIndex, x, y, newColour);
+    }
+  }
+};
+
+// Tritanopia (Blues are greatly reduced (0.003% of the population))
+app.applyColourBlindFilterTritanopia = function(uCanvasIndex) {
+  var width = app.colors[uCanvasIndex].$element.width();
+  var height = app.colors[uCanvasIndex].$element.height();
+  for (y = height / 2; y < height; y++) {
+    for (x = width / 2; x < width; x++) {
+      var colour = app.getPixel(uCanvasIndex, x, y);
+
+      var colourf = ColourRGB255ToRGBf(colour);
+      
+      var colourFilteredf = ApplyFilterTritanopia(colourf);
+      
+      var newColour = ColourRGBfToRGB255(colourFilteredf);
+      
+      app.setPixel(uCanvasIndex, x, y, newColour);
+    }
+  }
 };
