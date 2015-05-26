@@ -26,7 +26,8 @@
     <script type="text/javascript" charset="UTF-8">
       var handler = {
         OnColourSelected: function(uCanvasIndex) {
-          console.log("handler.OnColourSelected " + uCanvasIndex);
+          var colour = app.getColor(uCanvasIndex);
+          console.log("handler.OnColourSelected Canvas " + uCanvasIndex + ", RGB(" + colour.r + ", " + colour.g + ", " + colour.b + ")");
         }
       };
     

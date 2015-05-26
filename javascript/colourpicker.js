@@ -87,11 +87,14 @@ app.buildColorPalette = function(uCanvasIndex) {
 };
 
 app.getColor = function(uCanvasIndex) {
-  imageData = app.colorctx[uCanvasIndex].getImageData(app.colorEventX[uCanvasIndex], app.colorEventY[uCanvasIndex], 1, 1);
+  return app.getPixel(uCanvasIndex, app.colorEventX[uCanvasIndex], app.colorEventY[uCanvasIndex]);
+};
 
-  console.log("app.getColor RGB(" + imageData.data[4] + ", " + imageData.data[5] + ", " + imageData.data[6] + ")");
+app.getPixel = function(uCanvasIndex, x, y) {
+  // Get a 1x1 image of our pixel
+  imageData = app.colorctx[uCanvasIndex].getImageData(x, y, 1, 1);
 
-  var colour = { r : imageData.data[4], g : imageData.data[5], b : imageData.data[6] };
+  var colour = { r : imageData.data[0], g : imageData.data[1], b : imageData.data[2] };
   
   return colour;
 };
