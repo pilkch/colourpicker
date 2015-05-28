@@ -92,22 +92,33 @@ function ApplyFilterDeuteranopia(inputColour)
 // Tritanope - blues are greatly reduced (0.003% population)
 function ApplyFilterTritanopia(inputColour)
 {
-  // Get an LMS colour
-  var lms = RGBtoLMS(inputColour);
-  var L = lms.l;
-  var M = lms.m;
-  var S = lms.s;
-
-  var l = 1.0 * L + 0.0 * M + 0.0 * S;
-  var m = 0.0 * L + 1.0 * M + 0.0 * S;
-  var s = -0.395913 * L + 0.801109 * M + 0.0 * S;
-
-  // LMS to RGB matrix conversion
-  var colour = LMStoRGB(l, m, s);
-
-  ASSERT(colour.r < 1.0);
-  ASSERT(colour.g < 1.0);
-  ASSERT(colour.b < 1.0);
+  // NOTE: These lines didn't work so we use a matrix instead
+  //var l = 1.0 * L + 0.0 * M + 0.0 * S;
+  //var m = 0.0 * L + 1.0 * M + 0.0 * S;
+  //var s = -0.395913 * L + 0.801109 * M + 0.0 * S;
   
-  return colour;
+  var matTritanopia = [
+    0.972, 0.022, -0.063,
+    0.112, 0.818, 0.881,
+    -0.084, 0.160, 0.182
+  ];
+
+  var matTri0 = matTritanopia[0];
+  var matTri1 = matTritanopia[1];
+  var matTri2 = matTritanopia[2];
+  var matTri3 = matTritanopia[3];
+  var matTri4 = matTritanopia[4];
+  var matTri5 = matTritanopia[5];
+  var matTri6 = matTritanopia[6];
+  var matTri7 = matTritanopia[7];
+  var matTri8 = matTritanopia[8];
+
+  // Multiply out the input colour by the 3x3 matrix
+  var outputColour = {
+    r : inputColour.r * matTri0 + inputColour.g * matTri3 + inputColour.b * matTri6,
+    g : inputColour.r * matTri1 + inputColour.g * matTri4 + inputColour.b * matTri7,
+    b : inputColour.r * matTri2 + inputColour.g * matTri5 + inputColour.b * matTri8,
+  };
+  
+  return outputColour;
 }
