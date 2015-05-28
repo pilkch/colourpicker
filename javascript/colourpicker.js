@@ -121,8 +121,8 @@ app.setPixel = function(uCanvasIndex, x, y, colour) {
 app.applyColourBlindFilterProtanopia = function(uCanvasIndex) {
   var width = app.colors[uCanvasIndex].$element.width();
   var height = app.colors[uCanvasIndex].$element.height();
-  for (y = height / 2; y < height; y++) {
-    for (x = width / 2; x < width; x++) {
+  for (y = 0; y < height; y++) {
+    for (x = 0; x < width; x++) {
       var colour = app.getPixel(uCanvasIndex, x, y);
 
       var colourf = ColourRGB255ToRGBf(colour);
@@ -140,8 +140,8 @@ app.applyColourBlindFilterProtanopia = function(uCanvasIndex) {
 app.applyColourBlindFilterDeuteranopia = function(uCanvasIndex) {
   var width = app.colors[uCanvasIndex].$element.width();
   var height = app.colors[uCanvasIndex].$element.height();
-  for (y = height / 2; y < height; y++) {
-    for (x = width / 2; x < width; x++) {
+  for (y = 0; y < height; y++) {
+    for (x = 0; x < width; x++) {
       var colour = app.getPixel(uCanvasIndex, x, y);
 
       var colourf = ColourRGB255ToRGBf(colour);
@@ -159,8 +159,8 @@ app.applyColourBlindFilterDeuteranopia = function(uCanvasIndex) {
 app.applyColourBlindFilterTritanopia = function(uCanvasIndex) {
   var width = app.colors[uCanvasIndex].$element.width();
   var height = app.colors[uCanvasIndex].$element.height();
-  for (y = height / 2; y < height; y++) {
-    for (x = width / 2; x < width; x++) {
+  for (y = 0; y < height; y++) {
+    for (x = 0; x < width; x++) {
       var colour = app.getPixel(uCanvasIndex, x, y);
 
       var colourf = ColourRGB255ToRGBf(colour);
