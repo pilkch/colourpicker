@@ -38,6 +38,6 @@ RGB Tritanope - Blues are greatly reduced (0.003% of the population)
 Zerotheme's zSarah Theme  
 [http://www.zerotheme.com/1376/zsarah-free-responsive-html5-template.html](http://www.zerotheme.com/1376/zsarah-free-responsive-html5-template.html)  
 
-Rob Tarr's Color Picker  
+Rob Tarr's Colour Picker  
 [http://seesparkbox.com/foundry/how_i_built_a_canvas_color_picker](http://seesparkbox.com/foundry/how_i_built_a_canvas_color_picker)  
 [https://gist.github.com/robtarr/1199770](https://gist.github.com/robtarr/1199770)  

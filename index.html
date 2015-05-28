@@ -28,7 +28,7 @@
     <script type="text/javascript" charset="UTF-8">
       var handler = {
         OnColourSelected: function(uCanvasIndex) {
-          var colour = app.getColor(uCanvasIndex);
+          var colour = app.getColour(uCanvasIndex);
           console.log("handler.OnColourSelected Canvas " + uCanvasIndex + ", RGB(" + colour.r + ", " + colour.g + ", " + colour.b + ")");
         }
       };
@@ -76,7 +76,7 @@
             <div class="clear"></div>
             <div class="art-content">
               RGB<br/>
-              <canvas class="color-palette0" width="284" height="155"></canvas>
+              <canvas class="colour-palette0" width="284" height="155"></canvas>
             </div>
           </div>
           <div class="col-1-2 right">
@@ -84,7 +84,7 @@
             <div class="clear"></div>
             <div class="art-content">
               RGB as viewed with Protanopia (Reds are greatly reduced (1% of men))<br/>
-              <canvas class="color-palette1" width="284" height="155"></canvas>
+              <canvas class="colour-palette1" width="284" height="155"></canvas>
             </div>
           </div>
         </article>
@@ -94,7 +94,7 @@
             <div class="clear"></div>
             <div class="art-content">
               RGB as viewed with Deuteranopia (Greens are greatly reduced (1% of men))<br/>
-              <canvas class="color-palette2" width="284" height="155"></canvas>
+              <canvas class="colour-palette2" width="284" height="155"></canvas>
             </div>
           </div>
           <div class="col-1-2 left">
@@ -102,7 +102,7 @@
             <div class="clear"></div>
             <div class="art-content">
               RGB as viewed with Tritanopia (Blues are greatly reduced (0.003% of the population))<br/>
-              <canvas class="color-palette3" width="284" height="155"></canvas>
+              <canvas class="colour-palette3" width="284" height="155"></canvas>
             </div>
           </div>
         </article>

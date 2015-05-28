@@ -41,7 +41,7 @@ function ColourRGBfToRGB255(colourRGBf)
 // https://gist.github.com/jcdickinson/580b7fb5cc145cee8740
 
 // Daltonize (source http://www.daltonize.org/search/label/Daltonize)
-// Modified to simulate color blindness
+// Modified to simulate colour blindness
 
 // Protanope - reds are greatly reduced (1% men)
 function ApplyFilterProtanopia(inputColour)

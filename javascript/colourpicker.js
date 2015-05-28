@@ -9,14 +9,14 @@ app.init = function(handler) {
   app.handler = handler;
   
   // Create four colour elements
-  app.colors = [ { element:null }, { element:null }, { element:null }, { element:null } ];
+  app.colours = [ { element:null }, { element:null }, { element:null }, { element:null } ];
   
   // Create our contexts array
-  app.colorctx = [];
+  app.colourctx = [];
   
   // Create our positions arrays
-  app.colorEventX = [];
-  app.colorEventY = [];
+  app.colourEventX = [];
+  app.colourEventY = [];
 
   app.initCanvas(0);
   app.initCanvas(1);
@@ -30,18 +30,18 @@ app.init = function(handler) {
 };
 
 app.initCanvas = function(uCanvasIndex) {
-  var elements = $('canvas.color-palette' + uCanvasIndex);
-  app.colors[uCanvasIndex].$element = elements;
-  app.colorctx[uCanvasIndex] = elements[0].getContext('2d');
+  var elements = $('canvas.colour-palette' + uCanvasIndex);
+  app.colours[uCanvasIndex].$element = elements;
+  app.colourctx[uCanvasIndex] = elements[0].getContext('2d');
 
-  app.buildColorPalette(uCanvasIndex);
+  app.buildColourPalette(uCanvasIndex);
 }
 
-// Build Color palette
-app.buildColorPalette = function(uCanvasIndex) {
-  var gradient = app.colorctx[uCanvasIndex].createLinearGradient(0, 0, app.colors[uCanvasIndex].$element.width(), 0);
+// Build Colour palette
+app.buildColourPalette = function(uCanvasIndex) {
+  var gradient = app.colourctx[uCanvasIndex].createLinearGradient(0, 0, app.colours[uCanvasIndex].$element.width(), 0);
 
-  // Create color gradient
+  // Create colour gradient
   gradient.addColorStop(0,    "rgb(255,   0,   0)");
   gradient.addColorStop(0.15, "rgb(255,   0, 255)");
   gradient.addColorStop(0.33, "rgb(0,     0, 255)");
@@ -51,53 +51,53 @@ app.buildColorPalette = function(uCanvasIndex) {
   gradient.addColorStop(1,    "rgb(255,   0,   0)");
 
   // Apply gradient to canvas
-  app.colorctx[uCanvasIndex].fillStyle = gradient;
-  app.colorctx[uCanvasIndex].fillRect(0, 0, app.colorctx[uCanvasIndex].canvas.width, app.colorctx[uCanvasIndex].canvas.height);
+  app.colourctx[uCanvasIndex].fillStyle = gradient;
+  app.colourctx[uCanvasIndex].fillRect(0, 0, app.colourctx[uCanvasIndex].canvas.width, app.colourctx[uCanvasIndex].canvas.height);
 
   // Create semi transparent gradient (white -> trans. -> black)
-  gradient = app.colorctx[uCanvasIndex].createLinearGradient(0, 0, 0, app.colors[uCanvasIndex].$element.height());
+  gradient = app.colourctx[uCanvasIndex].createLinearGradient(0, 0, 0, app.colours[uCanvasIndex].$element.height());
   gradient.addColorStop(0,   "rgba(255, 255, 255, 1)");
   gradient.addColorStop(0.5, "rgba(255, 255, 255, 0)");
   gradient.addColorStop(0.5, "rgba(0,     0,   0, 0)");
   gradient.addColorStop(1,   "rgba(0,     0,   0, 1)");
 
   // Apply gradient to canvas
-  app.colorctx[uCanvasIndex].fillStyle = gradient;
-  app.colorctx[uCanvasIndex].fillRect(0, 0, app.colorctx[uCanvasIndex].canvas.width, app.colorctx[uCanvasIndex].canvas.height);
+  app.colourctx[uCanvasIndex].fillStyle = gradient;
+  app.colourctx[uCanvasIndex].fillRect(0, 0, app.colourctx[uCanvasIndex].canvas.width, app.colourctx[uCanvasIndex].canvas.height);
 
-  app.colors[uCanvasIndex].$element.mousedown(function(e) {
-    app.colorEventX[uCanvasIndex] = e.pageX - app.colors[uCanvasIndex].$element.offset().left;
-    app.colorEventY[uCanvasIndex] = e.pageY - app.colors[uCanvasIndex].$element.offset().top;
+  app.colours[uCanvasIndex].$element.mousedown(function(e) {
+    app.colourEventX[uCanvasIndex] = e.pageX - app.colours[uCanvasIndex].$element.offset().left;
+    app.colourEventY[uCanvasIndex] = e.pageY - app.colours[uCanvasIndex].$element.offset().top;
 
     app.handler.OnColourSelected(uCanvasIndex);
 
     // Track mouse movement on the canvas if the mouse button is down
     $(document).mousemove(function(e) {
-      app.colorEventX[uCanvasIndex] = e.pageX - app.colors[uCanvasIndex].$element.offset().left;
-      app.colorEventY[uCanvasIndex] = e.pageY - app.colors[uCanvasIndex].$element.offset().top;
+      app.colourEventX[uCanvasIndex] = e.pageX - app.colours[uCanvasIndex].$element.offset().left;
+      app.colourEventY[uCanvasIndex] = e.pageY - app.colours[uCanvasIndex].$element.offset().top;
 
       app.handler.OnColourSelected(uCanvasIndex);
     });
 
-    // Get the color at the current mouse coordinates
-    app.colorTimer = setInterval(function() { app.getColor(uCanvasIndex); }, 50);
+    // Get the colour at the current mouse coordinates
+    app.colourTimer = setInterval(function() { app.getColour(uCanvasIndex); }, 50);
   })
 
   // On mouseup, clear the interval and unbind the mousemove event,
   // it should only happen if the button is down
   .mouseup(function(e) {
-    clearInterval(app.colorTimer);
+    clearInterval(app.colourTimer);
     $(document).unbind('mousemove');
   });
 };
 
-app.getColor = function(uCanvasIndex) {
-  return app.getPixel(uCanvasIndex, app.colorEventX[uCanvasIndex], app.colorEventY[uCanvasIndex]);
+app.getColour = function(uCanvasIndex) {
+  return app.getPixel(uCanvasIndex, app.colourEventX[uCanvasIndex], app.colourEventY[uCanvasIndex]);
 };
 
 app.getPixel = function(uCanvasIndex, x, y) {
   // Get a 1x1 image of our pixel
-  imageData = app.colorctx[uCanvasIndex].getImageData(x, y, 1, 1);
+  imageData = app.colourctx[uCanvasIndex].getImageData(x, y, 1, 1);
 
   var colour = { r : imageData.data[0], g : imageData.data[1], b : imageData.data[2] };
   
@@ -106,7 +106,7 @@ app.getPixel = function(uCanvasIndex, x, y) {
 
 app.setPixel = function(uCanvasIndex, x, y, colour) {
   // Get a 1x1 image of our pixel
-  var imageData = app.colorctx[uCanvasIndex].createImageData(1, 1);
+  var imageData = app.colourctx[uCanvasIndex].createImageData(1, 1);
   var data  = imageData.data;
   data[0]   = colour.r;
   data[1]   = colour.g;
@@ -114,13 +114,13 @@ app.setPixel = function(uCanvasIndex, x, y, colour) {
   data[3]   = 255; // Full alpha
 
   // Set the new image data
-  app.colorctx[uCanvasIndex].putImageData(imageData, x, y);  
+  app.colourctx[uCanvasIndex].putImageData(imageData, x, y);  
 };
 
 // Protanopia (Reds are greatly reduced (1% of men))
 app.applyColourBlindFilterProtanopia = function(uCanvasIndex) {
-  var width = app.colors[uCanvasIndex].$element.width();
-  var height = app.colors[uCanvasIndex].$element.height();
+  var width = app.colours[uCanvasIndex].$element.width();
+  var height = app.colours[uCanvasIndex].$element.height();
   for (y = 0; y < height; y++) {
     for (x = 0; x < width; x++) {
       var colour = app.getPixel(uCanvasIndex, x, y);
@@ -138,8 +138,8 @@ app.applyColourBlindFilterProtanopia = function(uCanvasIndex) {
 
 // Deuteranopia (Greens are greatly reduced (1% of men))
 app.applyColourBlindFilterDeuteranopia = function(uCanvasIndex) {
-  var width = app.colors[uCanvasIndex].$element.width();
-  var height = app.colors[uCanvasIndex].$element.height();
+  var width = app.colours[uCanvasIndex].$element.width();
+  var height = app.colours[uCanvasIndex].$element.height();
   for (y = 0; y < height; y++) {
     for (x = 0; x < width; x++) {
       var colour = app.getPixel(uCanvasIndex, x, y);
@@ -157,8 +157,8 @@ app.applyColourBlindFilterDeuteranopia = function(uCanvasIndex) {
 
 // Tritanopia (Blues are greatly reduced (0.003% of the population))
 app.applyColourBlindFilterTritanopia = function(uCanvasIndex) {
-  var width = app.colors[uCanvasIndex].$element.width();
-  var height = app.colors[uCanvasIndex].$element.height();
+  var width = app.colours[uCanvasIndex].$element.width();
+  var height = app.colours[uCanvasIndex].$element.height();
   for (y = 0; y < height; y++) {
     for (x = 0; x < width; x++) {
       var colour = app.getPixel(uCanvasIndex, x, y);
