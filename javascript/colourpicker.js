@@ -14,6 +14,9 @@ app.init = function(handler) {
   // Create our contexts array
   app.colourctx = [];
   
+  // Create our gradient images array
+  app.gradientImage = [];
+  
   // Create our positions arrays
   app.colourEventX = [];
   app.colourEventY = [];
@@ -35,6 +38,33 @@ app.initCanvas = function(uCanvasIndex) {
   app.colourctx[uCanvasIndex] = elements[0].getContext('2d');
 
   app.buildColourPalette(uCanvasIndex);
+  
+  // Handle mouse down
+  app.colours[uCanvasIndex].$element.mousedown(function(e) {
+    app.colourEventX[uCanvasIndex] = e.pageX - app.colours[uCanvasIndex].$element.offset().left;
+    app.colourEventY[uCanvasIndex] = e.pageY - app.colours[uCanvasIndex].$element.offset().top;
+
+    app.handler.OnColourSelected(uCanvasIndex);
+
+    // Track mouse movement on the canvas if the mouse button is down
+    $(document).mousemove(function(e) {
+      app.colourEventX[uCanvasIndex] = e.pageX - app.colours[uCanvasIndex].$element.offset().left;
+      app.colourEventY[uCanvasIndex] = e.pageY - app.colours[uCanvasIndex].$element.offset().top;
+
+      app.handler.OnColourSelected(uCanvasIndex);
+    });
+
+    // Get the colour at the current mouse coordinates
+    app.colourTimer = setInterval(function() { app.getColour(uCanvasIndex); }, 50);
+  })
+
+  // Handle mouse up
+  .mouseup(function(e) {
+  // Clear the interval and unbind the mousemove event,
+  // it should only happen if the button is down
+    clearInterval(app.colourTimer);
+    $(document).unbind('mousemove');
+  });
 }
 
 // Build Colour palette
@@ -64,31 +94,6 @@ app.buildColourPalette = function(uCanvasIndex) {
   // Apply gradient to canvas
   app.colourctx[uCanvasIndex].fillStyle = gradient;
   app.colourctx[uCanvasIndex].fillRect(0, 0, app.colourctx[uCanvasIndex].canvas.width, app.colourctx[uCanvasIndex].canvas.height);
-
-  app.colours[uCanvasIndex].$element.mousedown(function(e) {
-    app.colourEventX[uCanvasIndex] = e.pageX - app.colours[uCanvasIndex].$element.offset().left;
-    app.colourEventY[uCanvasIndex] = e.pageY - app.colours[uCanvasIndex].$element.offset().top;
-
-    app.handler.OnColourSelected(uCanvasIndex);
-
-    // Track mouse movement on the canvas if the mouse button is down
-    $(document).mousemove(function(e) {
-      app.colourEventX[uCanvasIndex] = e.pageX - app.colours[uCanvasIndex].$element.offset().left;
-      app.colourEventY[uCanvasIndex] = e.pageY - app.colours[uCanvasIndex].$element.offset().top;
-
-      app.handler.OnColourSelected(uCanvasIndex);
-    });
-
-    // Get the colour at the current mouse coordinates
-    app.colourTimer = setInterval(function() { app.getColour(uCanvasIndex); }, 50);
-  })
-
-  // On mouseup, clear the interval and unbind the mousemove event,
-  // it should only happen if the button is down
-  .mouseup(function(e) {
-    clearInterval(app.colourTimer);
-    $(document).unbind('mousemove');
-  });
 };
 
 app.getColour = function(uCanvasIndex) {
