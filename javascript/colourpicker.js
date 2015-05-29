@@ -17,9 +17,9 @@ app.init = function(handler) {
   // Create our gradient images array
   app.gradientImage = [];
   
-  // Create our positions arrays
-  app.colourEventX = [];
-  app.colourEventY = [];
+  // Set our cursor position (Over green in the normal vision colour palette)
+  app.crossHairPositionX = 190;
+  app.crossHairPositionY = 77;
 
   app.initCanvas(0);
   app.initCanvas(1);
@@ -44,6 +44,9 @@ app.init = function(handler) {
   app.storeGradientImage(1);
   app.storeGradientImage(2);
   app.storeGradientImage(3);
+  
+  // Update our cross hairs
+  app.updateAllColourPickersFrom(0);
 };
 
 app.initCanvas = function(uCanvasIndex) {
@@ -53,21 +56,21 @@ app.initCanvas = function(uCanvasIndex) {
   
   // Handle mouse down
   app.colours[uCanvasIndex].$element.mousedown(function(e) {
-    app.colourEventX[uCanvasIndex] = e.pageX - app.colours[uCanvasIndex].$element.offset().left;
-    app.colourEventY[uCanvasIndex] = e.pageY - app.colours[uCanvasIndex].$element.offset().top;
+    app.crossHairPositionX = e.pageX - app.colours[uCanvasIndex].$element.offset().left;
+    app.crossHairPositionY = e.pageY - app.colours[uCanvasIndex].$element.offset().top;
 
     app.handler.OnColourSelected(uCanvasIndex);
     
-    app.render(uCanvasIndex);
+    app.updateAllColourPickersFrom(uCanvasIndex);
 
     // Track mouse movement on the canvas if the mouse button is down
     $(document).mousemove(function(e) {
-      app.colourEventX[uCanvasIndex] = e.pageX - app.colours[uCanvasIndex].$element.offset().left;
-      app.colourEventY[uCanvasIndex] = e.pageY - app.colours[uCanvasIndex].$element.offset().top;
+      app.crossHairPositionX = e.pageX - app.colours[uCanvasIndex].$element.offset().left;
+      app.crossHairPositionY = e.pageY - app.colours[uCanvasIndex].$element.offset().top;
 
       app.handler.OnColourSelected(uCanvasIndex);
       
-      app.render(uCanvasIndex);
+      app.updateAllColourPickersFrom(uCanvasIndex);
     });
 
     // Get the colour at the current mouse coordinates
@@ -80,8 +83,8 @@ app.initCanvas = function(uCanvasIndex) {
   // it should only happen if the button is down
     clearInterval(app.colourTimer);
     $(document).unbind('mousemove');
-    
-    app.render(uCanvasIndex);
+
+    app.updateAllColourPickersFrom(uCanvasIndex);
   });
 }
 
@@ -124,6 +127,12 @@ app.copyColourPaletteImageFromTheFirstTo = function(uCanvasIndex) {
   app.colourctx[uCanvasIndex].putImageData(app.gradientImage[0], 0, 0);
 }
 
+app.updateAllColourPickersFrom = function(uCanvasIndex) {
+  for (var i = 0; i < 4; i++) {
+    app.render(i);
+  }
+}
+
 app.render = function(uCanvasIndex) {
   var context = app.colourctx[uCanvasIndex];
 
@@ -134,8 +143,8 @@ app.render = function(uCanvasIndex) {
   context.putImageData(app.gradientImage[uCanvasIndex], 0, 0);
 
   // Draw our cursor
-  var x = app.colourEventX[uCanvasIndex];
-  var y = app.colourEventY[uCanvasIndex];
+  var x = app.crossHairPositionX;
+  var y = app.crossHairPositionY;
 
   var innerRadius = 3;
   var outerRadius = 10;
@@ -152,15 +161,27 @@ app.render = function(uCanvasIndex) {
   context.stroke();
 }
 
+app.getOriginalPixel = function(x, y) {
+  // Get a 1x1 image of our pixel
+  imageData = app.colourctx[0].getImageData(x, y, 1, 1);
+
+  var colour = { r : imageData.data[0], g : imageData.data[1], b : imageData.data[2] };
+
+  return colour;
+};
+
 app.getColour = function(uCanvasIndex) {
-  return app.getPixel(uCanvasIndex, app.colourEventX[uCanvasIndex], app.colourEventY[uCanvasIndex]);
+  return app.getPixel(uCanvasIndex, app.crossHairPositionX, app.crossHairPositionY);
 };
 
 app.getPixel = function(uCanvasIndex, x, y) {
   // Get a 1x1 image of our pixel
-  imageData = app.colourctx[uCanvasIndex].getImageData(x, y, 1, 1);
+  var imageData = app.gradientImage[uCanvasIndex];
 
-  var colour = { r : imageData.data[0], g : imageData.data[1], b : imageData.data[2] };
+  var width = app.colours[uCanvasIndex].$element.width();
+
+  var index = 4 * ((y * width) + x);
+  var colour = { r : imageData.data[index], g : imageData.data[index + 1], b : imageData.data[index + 2] };
 
   return colour;
 };
@@ -184,7 +205,7 @@ app.applyColourBlindFilterProtanopia = function(uCanvasIndex) {
   var height = app.colours[uCanvasIndex].$element.height();
   for (y = 0; y < height; y++) {
     for (x = 0; x < width; x++) {
-      var colour = app.getPixel(uCanvasIndex, x, y);
+      var colour = app.getOriginalPixel(x, y);
 
       var colourf = ColourRGB255ToRGBf(colour);
       
@@ -203,7 +224,7 @@ app.applyColourBlindFilterDeuteranopia = function(uCanvasIndex) {
   var height = app.colours[uCanvasIndex].$element.height();
   for (y = 0; y < height; y++) {
     for (x = 0; x < width; x++) {
-      var colour = app.getPixel(uCanvasIndex, x, y);
+      var colour = app.getOriginalPixel(x, y);
 
       var colourf = ColourRGB255ToRGBf(colour);
       
@@ -222,7 +243,7 @@ app.applyColourBlindFilterTritanopia = function(uCanvasIndex) {
   var height = app.colours[uCanvasIndex].$element.height();
   for (y = 0; y < height; y++) {
     for (x = 0; x < width; x++) {
-      var colour = app.getPixel(uCanvasIndex, x, y);
+      var colour = app.getOriginalPixel(x, y);
 
       var colourf = ColourRGB255ToRGBf(colour);
       
