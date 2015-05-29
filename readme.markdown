@@ -27,7 +27,7 @@ You should have received a copy of the GNU Lesser General Public
 
 This is just a colour picker written in javascript, but it also has 3 other colour pickers that show a basic simulation of what a colour blind person might see.  
 
-[http://chris.iluo.net/projects/colourpicker/](Example)  
+[Example](http://chris.iluo.net/projects/colourpicker/)  
 
 The four colour pickers available are:  
 RGB  
