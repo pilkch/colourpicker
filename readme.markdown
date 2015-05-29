@@ -22,16 +22,20 @@ This software is distributed in the hope that it will be useful,
 You should have received a copy of the GNU Lesser General Public  
  License along with this software; if not, write to the Free Software  
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA  
-
+ 
 ### What is this?
 
 This is just a colour picker written in javascript, but it also has 3 other colour pickers that show a basic simulation of what a colour blind person might see.  
+
+[http://chris.iluo.net/projects/colourpicker/](Example)  
 
 The four colour pickers available are:  
 RGB  
 RGB Protanope - Reds are greatly reduced (1% of men)  
 RGB Deuteranope - Greens are greatly reduced (1% of men)  
 RGB Tritanope - Blues are greatly reduced (0.003% of the population)  
+
+The four colour pickers are essentially intertwined.  With some massaging a colour picker class could be extracted so that a single colour picker could be instantiated independently.  
 
 ### Credit
 
