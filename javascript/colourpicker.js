@@ -159,6 +159,13 @@ app.render = function(uCanvasIndex) {
   context.moveTo(x, y + innerRadius);
   context.lineTo(x, y + outerRadius);
   context.stroke();
+
+  // Draw the RGB value
+  var colour = app.getColour(uCanvasIndex);
+  var sText = "RGB(" + colour.r + ", " + colour.g + ", " + colour.b + ")";
+  context.font = "20px Georgia"
+  context.fillStyle = "#000000";
+  context.fillText(sText, 6, 22);
 }
 
 app.getOriginalPixel = function(x, y) {
