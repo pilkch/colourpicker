@@ -43,6 +43,9 @@ app.init = function (handler) {
   
   // Update our cross hairs
   app.updateAllColourPickersFrom(0);
+
+  // Init the controls on the rest of the page
+  app.handler.OnColourSelected(0);
 };
 
 app.initCanvas = function(uCanvasIndex) {

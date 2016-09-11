@@ -52,10 +52,6 @@
         // Replace text descriptions
         element.appendChild(element.ownerDocument.createTextNode("RGB: (" + colourRGB.r + ", " + colourRGB.g + ", " + colourRGB.b + ")"));
         element.appendChild(element.ownerDocument.createElement("br"));
-        element.appendChild(element.ownerDocument.createTextNode("Hex: #" + colourHex.r + colourHex.g + colourHex.b));
-        element.appendChild(element.ownerDocument.createElement("br"));
-        element.appendChild(element.ownerDocument.createTextNode("Float: (" + colourFloat.r + "f, " + colourFloat.g + "f, " + colourFloat.b + "f)"));
-        element.appendChild(element.ownerDocument.createElement("br"));
         element.appendChild(element.ownerDocument.createTextNode("HSL: (" + colourHSL.h + ", " + colourHSL.s + ", " + colourHSL.l + ")"));
         element.appendChild(element.ownerDocument.createElement("br"));
         element.appendChild(element.ownerDocument.createTextNode("HSV: (" + colourHSV.h + ", " + colourHSV.s + ", " + colourHSV.v + ")"));
@@ -66,19 +62,16 @@
 
         // Update controls
         document.getElementById('numberRed').value = colourRGB.r;
-        document.getElementById('slideRed').value = colourRGB.r;
-        document.getElementById('numberRedh').value = colourHex.r;
-        document.getElementById('numberRedf').value = colourFloat.r;
+        document.getElementById('sliderRed').value = colourRGB.r;
 
         document.getElementById('numberGreen').value = colourRGB.g;
-        document.getElementById('slideGreen').value = colourRGB.g;
-        document.getElementById('numberGreenh').value = colourHex.g;
-        document.getElementById('numberGreenf').value = colourFloat.g;
+        document.getElementById('sliderGreen').value = colourRGB.g;
 
         document.getElementById('numberBlue').value = colourRGB.b;
-        document.getElementById('slideBlue').value = colourRGB.b;
-        document.getElementById('numberBlueh').value = colourHex.b;
-        document.getElementById('numberBluef').value = colourFloat.b;
+        document.getElementById('sliderBlue').value = colourRGB.b;
+
+        document.getElementById('numberHex').value = "#" + colourHex.r + colourHex.g + colourHex.b;
+        document.getElementById('numberFloat').value = "(" + colourFloat.r + "f, " + colourFloat.g + "f, " + colourFloat.b + "f)";
       }
 
       function OnControlsChanged()
@@ -120,49 +113,29 @@
         OnControlsChanged();
       }
 
-      function changeRedHex(value) {
-        // Update our red control
-        document.getElementById('numberRed').value = parseInt(value, 16);
+      function changeHex(value) {
+        // Parse the RGB hex values from a string such as "#123456"
+        var colour = ParseColourHexString(value);
+        if (colour != null) {
+          // Update our control
+          document.getElementById('numberRed').value = colour.r;
+          document.getElementById('numberGreen').value = colour.g;
+          document.getElementById('numberBlue').value = colour.b;
+        }
 
         // How update all the controls and update the canvases
         OnControlsChanged();
       }
 
-      function changeGreenHex(value) {
-        // Update our green control
-        document.getElementById('numberGreen').value = parseInt(value, 16);
-
-        // How update all the controls and update the canvases
-        OnControlsChanged();
-      }
-
-      function changeBlueHex(value) {
-        // Update our blue control
-        document.getElementById('numberBlue').value = parseInt(value, 16);
-
-        // How update all the controls and update the canvases
-        OnControlsChanged();
-      }
-
-      function changeRedFloat(value) {
-        // Update our red control
-        document.getElementById('numberRed').value = value * 255.0;
-
-        // How update all the controls and update the canvases
-        OnControlsChanged();
-      }
-
-      function changeGreenFloat(value) {
-        // Update our green control
-        document.getElementById('numberGreen').value = value * 255.0;
-
-        // How update all the controls and update the canvases
-        OnControlsChanged();
-      }
-
-      function changeBlueFloat(value) {
-        // Update our blue control
-        document.getElementById('numberBlue').value = value * 255.0;
+      function changeFloat(value) {
+        // Parse the RGB floating point values from a string such as "(1.0f, 1.0f, 1.0f)"
+        var colour = ParseColourFloatString(value);
+        if (colour != null) {
+          // Update our control
+          document.getElementById('numberRed').value = colour.r * 255.0;
+          document.getElementById('numberGreen').value = colour.g * 255.0;
+          document.getElementById('numberBlue').value = colour.b * 255.0;
+        }
 
         // How update all the controls and update the canvases
         OnControlsChanged();
@@ -249,43 +222,33 @@
     <section class="container page-home">
       <div id="bonus-rgb-int-hex-float" class="wrap-container zerogrid">
         <article>
-          <div class="col-1-2 left">
-            <a class="art-category left" href="#">RGB</a>
+          <div class="col-bonus left">
+            <a class="art-category left">RGB</a>
             <div class="clear"></div>
             <div class="art-content">
               Bonus RGB Int/Hex/Float Converter<br/>
               <canvas class="colour-palette4" width="284" height="155"></canvas>
             </div>
-            <div id="rgb-text">
-              RGB: (0, 0, 0)<br/>
-              Hex: #000000<br/>
-              Float: (0.0f, 0.0f, 0.0f)<br/>
-              HSL: (0, 0, 0)<br/>
-              HSV: (0, 0, 0)<br/>
-              YUV: (0, 0, 0)
-            </div>
           </div>
-          <div class="col-1-2 right">
-            <label for="numberRed">R</label>
-            <input id="numberRed" type="number" min="0" max="255" value ="0" onchange="changeRed(this.value)"/>
-            <input id="slideRed" type="range" name="slideRed" min="0" max="255" oninput="changeRed(this.value)" onchange="changeRed(this.value)"/>
-            <input id="numberRedh" type="text" value="FF" onblur="changeRedHex(this.value)"/>
-            <input id="numberRedf" type="number" min="0.0" max="1.0" value ="0.0" step="0.01" onchange="changeRedFloat(this.value)"/>
-            <label for="numberGreen">G</label>
-            <input id="numberGreen" type="number" min="0" max="255" value ="0" onchange="changeGreen(this.value)"/>
-            <input id="slideGreen" type="range" name="slideGreen" min="0" max="255" oninput="changeGreen(this.value)" onchange="changeGreen(this.value)"/>
-            <input id="numberGreenh" type="text" value="FF" onblur="changeGreenHex(this.value)"/>
-            <input id="numberGreenf" type="number" min="0.0" max="1.0" value ="0.0" step="0.01" onchange="changeGreenFloat(this.value)"/>
-            <label for="numberBlue">B</label>
-            <input id="numberBlue" type="number" min="0" max="255" value ="0" onchange="changeBlue(this.value)"/>
-            <input id="slideBlue" type="range" name="slideBlue" min="0" max="255" oninput="changeBlue(this.value)" onchange="changeBlue(this.value)"/>
-            <input id="numberBlueh" type="text" value="FF" onblur="changeBlueHex(this.value)"/>
-            <input id="numberBluef" type="number" min="0.0" max="1.0" value ="0.0" step="0.01" onchange="changeBlueFloat(this.value)"/>
+          <div class="col-bonus right">
+            <p>
+              R: <input id="numberRed" type="number" min="0" max="255" value ="0" onchange="changeRed(this.value)"/> <input id="sliderRed" type="range" name="sliderRed" min="0" max="255" oninput="changeRed(this.value)" onchange="changeRed(this.value)"/>
+              G: <input id="numberGreen" type="number" min="0" max="255" value ="0" onchange="changeGreen(this.value)"/> <input id="sliderGreen" type="range" name="sliderGreen" min="0" max="255" oninput="changeGreen(this.value)" onchange="changeGreen(this.value)"/>
+              B: <input id="numberBlue" type="number" min="0" max="255" value ="0" onchange="changeBlue(this.value)"/> <input id="sliderBlue" type="range" name="sliderBlue" min="0" max="255" oninput="changeBlue(this.value)" onchange="changeBlue(this.value)"/><br />
+              Hex: <input id="numberHex" type="text" value="#000000" onblur="changeHex(this.value)"/><br />
+              Float: <input id="numberFloat" type="text" value ="(0.0f, 0.0f, 0.0f)" onchange="changeFloat(this.value)"/>
+              <div id="rgb-text">
+                RGB: (0, 0, 0)<br/>
+                HSL: (0, 0, 0)<br/>
+                HSV: (0, 0, 0)<br/>
+                YUV: (0, 0, 0)
+              </div>
+            </p>
           </div>
         </article>
         <article>
           <div>
-            Scratch Pad (For pasting colours temporarily):
+            <a class="art-category left">Scratch Pad (For pasting colours temporarily, or whatever you feel like):</a>
             <textarea cols="40" rows="5"></textarea>
           </div>
         </article>
