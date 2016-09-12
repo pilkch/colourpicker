@@ -1,3 +1,96 @@
+// Stolen from:
+// https://stackoverflow.com/questions/2348597/why-doesnt-this-javascript-rgb-to-hsl-code-work
+function RGBtoHSL(colourRGB)
+{
+  var r = colourRGB.r / 255.0;
+  var g = colourRGB.g / 255.0;
+  var b = colourRGB.b / 255.0;
+
+  var max = Math.max(r, g, b), min = Math.min(r, g, b);
+  var h, s, l = (max + min) / 2;
+
+  if (max == min) {
+    h = s = 0; // achromatic
+  } else {
+    var d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+
+  return { h: Math.floor(h * 360), s: Math.floor(s * 100), l: Math.floor(l * 100) };
+}
+
+// Stolen from:
+// https://stackoverflow.com/questions/16835070/create-gradient-for-color-selection-with-html5-canvas-all-possible-rgb-colors
+// Takes in an RGB colour 0..255, returns a HSV colour 0..360, 0..100, 0.100
+function RGBtoHSV(colourRGB)
+{
+  var r = colourRGB.r / 255.0;
+  var g = colourRGB.g / 255.0;
+  var b = colourRGB.b / 255.0;
+
+  var h = 0.0;
+  var s = 0.0;
+
+  var v = Math.max(r, g, b);
+  var diff = v - Math.min(r, g, b);
+
+  var diffc = function (c) {
+    return (v - c) / 6 / diff + 1 / 2;
+  };
+
+  if (diff === 0) {
+    h = s = 0;
+  } else {
+    s = diff / v;
+
+    var rr = diffc(r);
+    var gg = diffc(g);
+    var bb = diffc(b);
+
+    if (r === v) h = bb - gg;
+    else if (g === v) h = (1 / 3) + rr - bb;
+    else if (b === v) h = (2 / 3) + gg - rr;
+
+    if (h < 0) h += 1;
+    else if (h > 1) h -= 1;
+  }
+
+  return {
+    h: (h * 360 + 0.5) | 0,
+    s: (s * 100 + 0.5) | 0,
+    v: (v * 100 + 0.5) | 0
+  };
+}
+
+// Stolen from here:
+// https://www.mikekohn.net/file_formats/yuv_rgb_converter.php
+function RGBtoYUV(colourRGB)
+{
+  var r = colourRGB.r;
+  var g = colourRGB.g;
+  var b = colourRGB.b;
+
+  var y = r * 0.299000 + g * 0.587000 + b * 0.114000
+  var u = r * -0.168736 + g * -0.331264 + b * 0.500000 + 128.0
+  var v = r * 0.500000 + g * -0.418688 + b * -0.081312 + 128.0
+
+  output_y = Math.floor(y);
+  output_u = Math.floor(u);
+  output_v = Math.floor(v);
+
+  return {
+    y: output_y,
+    u: output_u,
+    v: output_v
+  };
+}
+
 // Convert RGB to LMS
 // http://en.wikipedia.org/wiki/LMS_color_space
 function RGBtoLMS(colourRGB)
