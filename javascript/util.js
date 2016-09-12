@@ -27,7 +27,7 @@ function ParseColourHexString(value)
   else if (value[0] != "#") return null;
 
   var colour = { r: parseInt(value.substring(1, 3), 16), g: parseInt(value.substring(3, 5), 16), b: parseInt(value.substring(5, 7), 16) };
-  console.log("ParseColourHexString value=\"" + value + "\", 0=\"" + value.substring(1, 3) + "\", 1=\"" + value.substring(3, 5) + "\", 2=\"" + value.substring(5, 7) + "\", returning (" + colour.r + ", " + colour.g + ", " + colour.b + ")");
+  //console.log("ParseColourHexString value=\"" + value + "\", 0=\"" + value.substring(1, 3) + "\", 1=\"" + value.substring(3, 5) + "\", 2=\"" + value.substring(5, 7) + "\", returning (" + colour.r + ", " + colour.g + ", " + colour.b + ")");
   return colour;
 }
 
